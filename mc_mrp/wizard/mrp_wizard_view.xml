@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		
+       	<record model="ir.ui.view" id="mc_mrp_wizard_view">
+        	<field name="name">mc.mrp.wizard.view</field>
+        	<field name="model">mrp.production.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">            
+                <form string="Produccion" version="7.0">        	
+                	
+                	<sheet>
+	                    <div class="oe_title">
+	                        <h1>Manufacturing Order <field name="name" class="oe_inline"/></h1>
+	                    </div>
+	                    
+	                    <group>
+	                    	
+	                    	<group>
+	                    		<field name="productos_line" on_change="product_id_change(productos_line)"/>
+	                    		<field name="product_id" invisible="1"/>
+	                    		<field name="product_qty" class="oe_inline"/>
+	                            <field name="product_uom" />
+	                    	</group>
+	                    	<group>
+	                    		<field name="bom_id" on_change="bom_id_change(bom_id)" domain="[('product_id','=',product_id)]"/>
+	                    		<field name="origin" invisible="1"/>
+	                    	</group>
+	                    
+	                    </group>
+	                    <group>
+	                    	<field name="desc"/>
+	                    </group>
+	                    <field name="bom_lines">
+                    		<tree string="Lineas" editable="bottom">
+                    			<!-- <field name="name"/>
+                    			<field name="code"/>
+                    			<field name="type" /> -->
+                    			<field name="product_id" />
+                    			<field name="name" />
+                    			<field name="product_qty" />
+                    			<field name="location_id" domain="[('usage','=','internal'),('chained_location_type','=','none')]"/>
+                    			<!-- <field name="product_uom" />
+                    			<field name="bom_id"/> -->                    			
+                    		</tree>
+                    	</field>
+	                </sheet>
+                    <footer class="oe_right">
+                    	<button name="action_save_mrp" string="Crear MO" type="object" class="oe_highlight"/>
+                    	<button special="cancel" string="Cancelar"/>
+                    </footer>
+                    
+                </form>
+            </field>
+		</record>                   
+            	
+        <record model="ir.ui.view" id="mc_mrp_material_view">
+        	<field name="name">mc.mrp.material.view</field>
+        	<field name="model">mrp.add.material.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">            
+                <form string="Materiales" version="7.0">                		                 
+                    <group>
+                    	<group>
+	                    	<field name="product_id" on_change="product_id_change(product_id)"/>	
+	                    	<field name="product_qty"/>
+	                    	<field name="product_uom"/>	                    	
+                    	</group>
+                    	<group>
+                    		<field name="location_id" domain="[('usage','=','internal'),('chained_location_type','=','none')]"/>		
+                    	</group>
+                    </group>                    
+                    <footer class="oe_right">
+                    	<button name="action_add_material" string="Agregar" type="object" class="oe_highlight"/>
+	                   or
+	                   <button special="cancel" string="Cancelar" class="oe_link"/>
+                    </footer>
+				</form>				
+			</field>
+		</record>
+        
+        <record id="mrp_wizard_action" model="ir.actions.act_window">
+			<field name="name">Crear MRP</field>
+			<field name="res_model">mrp.production.wizard</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="mc_mrp_wizard_view"/>
+			<field name="target">new</field>
+		</record>
+		
+		<record id="mrp_add_material_action" model="ir.actions.act_window">
+			<field name="name">Agregar Material</field>
+			<field name="res_model">mrp.add.material.wizard</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="mc_mrp_material_view"/>
+			<field name="target">new</field>
+		</record>
+        
+	</data>
+</openerp>

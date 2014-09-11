@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>		
+	
+		<record id="mc_estados_tipo_view_tree" model="ir.ui.view">
+	        <field name="name">mc.estados.tipo.view.tree</field>
+	        <field name="model">mc.mrp.tipo</field>	        
+	        <field name='arch' type='xml'>
+	            <tree string="Tipos de Fabricacion">	                
+	                <field name="name"/>	          
+	            </tree>            
+	        </field>            
+	    </record>
+	    
+	    <record id="mc_estados_tipo_view_form" model="ir.ui.view">
+	        <field name="name">mc.estados.tipo.view.form</field>
+	        <field name="model">mc.mrp.tipo</field>	        
+	        <field name='arch' type='xml'>
+	            <form version="7.0" string="Estados de Fabricacion"> 
+	                <group>
+	                	<field name="name"/>
+	                </group>	    
+	                <notebook>
+	                	<page string="Estados de Fabricacion">            
+			                <field name="estados">
+			                	<tree editable="bottom">			                		
+			                		<field name="name"/>
+			                		<field name="code"/>
+			                	</tree>
+			                </field>
+		                </page>        
+	                </notebook>        	          
+	            </form>            
+	        </field>            
+	    </record>
+	    
+	    <record id="mc_estados_view_tree" model="ir.ui.view">
+	        <field name="name">mc.estados.view.tree</field>
+	        <field name="model">mc.mrp.estado</field>	        
+	        <field name='arch' type='xml'>
+	            <tree string="Tipos de Fabricacion">	                
+	                <field name="code"/>
+	                <field name="name"/>
+	                <field name="tipo"/>	                
+	            </tree>            
+	        </field>            
+	    </record>
+	    
+	    <record id="mc_estado_line_view_tree" model="ir.ui.view">
+	        <field name="name">mc.estado.line.view.tree</field>
+	        <field name="model">mc.mrp.estado.line</field>	        
+	        <field name='arch' type='xml'>
+	            <tree string="Tipos de Fabricacion">	                
+	                <field name="name"/>
+	                <field name="estatus_id"/>
+	                <field name="state"/>
+	                <field name="order_id"/>	                
+	            </tree>            
+	        </field>            
+	    </record>
+	    
+	    <record id="action_mc_estados_tipo" model="ir.actions.act_window">
+	            <field name="name">Tipos de Fabricacion</field>
+	            <field name="res_model">mc.mrp.tipo</field>
+	            <field name="view_type">form</field>
+	            <field name="view_mode">tree,form</field>	            
+	    </record>
+	    
+	    <record id="action_mc_estados" model="ir.actions.act_window">
+	            <field name="name">Estados de Fabricacion</field>
+	            <field name="res_model">mc.mrp.estado</field>
+	            <field name="view_type">form</field>
+	            <field name="view_mode">tree,form</field>	            
+	    </record>
+	    
+	    <record id="action_mc_estados_line" model="ir.actions.act_window">
+	            <field name="name">Lineas de Estados de Fabricacion</field>
+	            <field name="res_model">mc.mrp.estado.line</field>
+	            <field name="view_type">form</field>
+	            <field name="view_mode">tree,form</field>	            
+	    </record>
+	    
+	    <menuitem action="action_mc_estados_tipo" id="mc_menu_estados_tipo" parent="base.menu_sales" groups="account.group_account_manager"/>	    
+	    <!-- <menuitem action="action_mc_estados" id="mc_menu_estados" parent="base.menu_sales" />	    
+	    <menuitem action="action_mc_estados_line" id="mc_menu_estados_line" parent="base.menu_sales" /> -->	
+			
+		<record id="mc_view_order_form" model="ir.ui.view">
+			<field name="name">mc.view.order.form</field>
+			<field name="model">sale.order</field>
+			<field name="inherit_id" ref="sale.view_order_form" />			
+			<field name='arch' type='xml'>
+							
+				<field name="pricelist_id" position="after">
+					<field name="mrp_design" />
+					<field name="mrp_sale_type" required="1"/>
+				</field>				
+				
+				<notebook position="inside">
+					<page string="MO Information" attrs="{'invisible':['|',('state','=','draft'),('state','=','sent')]}">
+						<group>
+							<group>								
+								<field name="mrp_sale_state" invisible="False" readonly="1"/>
+							</group>
+							<group>
+								<div class="oe_right oe_button_box" name="buttons">								
+									
+								<button name="%(mrp_wizard_action)s" type="action" string="Crear MRP" class="oe_highlight" 
+										context="{'sale_id':active_id}" attrs="{'invisible': [('mrp_sale_state','=','Finalizado')]}"/>
+									
+									<button name="action_ver_mrp" string="Ver M Orders"
+										type="object" class="oe_highlight" />
+										
+									<button name="action_finish_mrp" string="Finalizar Produccion" type="object" 
+										class="oe_highlight" attrs="{'invisible': [('mrp_sale_state','=','Finalizado')]}"/>
+										
+									<button name="action_reopen_mrp" string="Reabrir Produccion" type="object" 
+										class="oe_highlight" attrs="{'invisible': [('mrp_sale_state','!=','Finalizado')]}"/>
+								
+								</div>
+							</group>
+						</group>
+						<field name="estatus_line">
+							<tree string="Lineas de Estado de Fabricacion" edit="false" create="false" delete="true">
+								<field name="name"/>
+								<field name="estatus_id"/>
+								<field name="user_id"/>
+								<field name="date_start"/>
+								<field name="date_finish"/>																
+								<field name="state"/>
+								<button name="action_start_mrp" string="Iniciar Proceso" type="object" 
+									icon="gtk-execute" attrs="{'invisible': [('state','!=','new')]}"/>								
+								<button name="action_stop_mrp" string="Terminar Proceso" type="object" 
+									icon="gtk-apply" attrs="{'invisible': [('state','!=','started')]}"/>																														
+							</tree>
+						</field>
+					</page>
+				</notebook>
+			</field>
+		</record>
+
+		<record id="mc_view_order_tree" model="ir.ui.view">
+            <field name="name">mc.sale.order.tree</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_tree" />
+            <field name="arch" type="xml">                
+            	<field name="state" position="before">            		
+            		<field name="mrp_design"/>
+            		<field name="mrp_sale_state"/>
+            	</field>                
+            </field>
+        </record>
+        
+		<record id="mc_search_view_order" model="ir.ui.view">
+		    <field name="name">mc.search.view.order</field>
+		    <field name="model">sale.order</field>
+		    <field name="inherit_id" ref="sale.view_sales_order_filter"></field>
+		    <field name="arch" type="xml">
+		    	<field name="project_id" position="after">
+		    		<separator/>
+		    		<filter string="Con Diseño" icon="terp-personal" domain="[('mrp_design', '=', True)]" context=""/>
+		    		<filter string="MO Sin Iniciar" icon="terp-personal" domain="[('mrp_sale_state', '=', 'Sin Iniciar')]" context=""/>
+		        	<filter string="MO No Finalizadas" icon="terp-personal" domain="['|', ('mrp_sale_state', '!=', 'Finalizado'), ('mrp_sale_state', '=', False)]" context=""/>
+		    	</field>		        
+		    </field>
+		</record>
+	</data>
+</openerp>
