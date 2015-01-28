@@ -11,3 +11,14 @@ class mc_stock_move(osv.osv):
     
     
 mc_stock_move()
+
+class mc_stock_location(osv.osv):
+    
+    _inherit = 'stock.location'
+    
+    _columns = {
+        "ubicacion_prestamo" : fields.boolean("Prestamos")        
+    }
+    
+    
+mc_stock_location()
