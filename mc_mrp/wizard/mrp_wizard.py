@@ -116,7 +116,7 @@ class mc_mrp_material_wizard(osv.osv_memory):
             
         return result
     
-    _columns = {
+    _columns = {            
             "product_id" :  fields.many2one("product.product", "Material", required=True),
             "product_qty": fields.float('Cantidad', required=True),
             "product_uom": fields.many2one('product.uom', 'Unidad de Medida', readonly=True),
@@ -257,6 +257,7 @@ class mc_mrp_wizard(osv.osv_memory):
         "product_uom": fields.many2one('product.uom', 'Unidad de Medida', readonly=True),
         "origin" : fields.char("Origen"),
         "bom_lines" : fields.one2many("mrp.bom", "bom_id"),
+        "tipo_ldm" : fields.many2one("mrp.bom.types", "Tipo de Lista"),
     }
     
     _defaults = {  
