@@ -24,7 +24,7 @@
 	                    	</group>
 	                    	<group>
 	                    		<field name="tipo_ldm"/>
-	                    		<field name="bom_id" on_change="bom_id_change(bom_id)" domain="[('product_id','=',product_id)]"/>
+	                    		<field name="bom_id" on_change="bom_id_change(bom_id)" domain="[('tipo_ldm','=',tipo_ldm)]"/>
 	                    		<field name="origin" invisible="1"/>
 	                    	</group>
 	                    
