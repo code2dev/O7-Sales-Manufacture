@@ -5,6 +5,9 @@ class mc_mrp_bom(osv.osv):
     _inherit = 'mrp.bom'
     
     _columns = {
+        "status_creation" : fields.selection([("new", "Nuevo"), 
+                                              ("done", "Realizado")], 
+                                             "Estado de Creacion"),        
         "venta_wzrd" : fields.integer("Venta"),
         'location_id': fields.many2one('stock.location', 'Ubicacion', select=True),
     }
@@ -12,10 +15,33 @@ class mc_mrp_bom(osv.osv):
     def write(self, cr, uid, ids, vals, context=None):
        
         if context  and context.has_key("active_model") :   
-            if context["active_model"] == "sale.order" and vals.has_key("bom_id"):    
-                del vals["bom_id"]          
-        
-        if vals:
+            
+            if context["active_model"] == "sale.order": 
+                
+                if vals.has_key("bom_id"):    
+                    del vals["bom_id"]
+                    
+                if not vals:
+                    return True
+                
+                bom = self.browse(cr, uid, ids[0], context=context)
+                
+                if not vals.has_key("product_id"):
+                    vals["product_id"] = bom.product_id.id
+                    
+                if not vals.has_key("name"):
+                    vals["name"] = bom.name
+                    
+                if not vals.has_key("location_id"):
+                    vals["location_id"] = False
+                    
+                if not vals.has_key("product_qty"):
+                    vals["product_qty"] = 1
+                    
+                self.create(cr, uid, vals, context=context)                
+                vals = {}
+                
+        elif vals:                
             res = super(mc_mrp_bom, self).write(cr, uid, ids, vals, context=context)
         
         return True
@@ -30,6 +56,7 @@ class mc_mrp_bom(osv.osv):
                     mo_id  = values["bom_id"] 
                 
                 values["bom_id"] = False
+                values["status_creation"] = "new"
                 
                 product = self.pool.get("product.product").browse(cr, uid, values["product_id"], context=context)
                 
@@ -39,16 +66,18 @@ class mc_mrp_bom(osv.osv):
                 
                 if not values.has_key("name"):
                     values["name"] = product.name 
-                
+        
+                       
         res = super(mc_mrp_bom, self).create(cr, uid, values, context=context)
         
-        if mo_id:
-            self.write(cr, uid, res, {"venta_wzrd" : mo_id}, context)
+#         if mo_id:
+#             self.write(cr, uid, res, {"venta_wzrd" : mo_id}, context)
         
         return res
     
 mc_mrp_bom()
 
+# Wizard para agregar material desde la MO
 class mc_mrp_material_wizard(osv.osv_memory):    
 
     _name = "mrp.add.material.wizard"
@@ -88,7 +117,10 @@ class mc_mrp_material_wizard(osv.osv_memory):
         
         move_id = move_obj.search(cr, uid, [("production_id", "=", context["mo"])], context=context)[0]
         move = move_obj.browse(cr, uid, move_id, context=context)        
-        shipment_id = ship_obj.search(cr, uid, [("origin", "like", move.name)], context=context)[0]
+        shipment_id = ship_obj.search(cr, uid, [("origin", "like", move.name)], context=context)
+        if shipment_id and len(shipment_id) > 0:
+            shipment_id = shipment_id[0]
+#         shipment_id = ship_obj.search(cr, uid, [("origin", "like", move.name)], context=context)[0]
                 
         consume_move_id = mrp_obj._make_production_consume_line(cr, uid, prod_line, move_id, source_location_id=this.location_id.id, context=context)
         move_obj.write(cr, uid, consume_move_id, {"product_cost" : product.standard_price}, context=context)
@@ -142,7 +174,8 @@ class mc_mrp_wizard(osv.osv_memory):
             result["value"].update({
                 "product_qty" : res["product_uom_qty"],
                 "product_id" : res["product_id"][0],
-                "desc" : res["name"]
+                "desc" : res["name"],
+                "bom_id" : False
             })
             
         else:
@@ -211,31 +244,36 @@ class mc_mrp_wizard(osv.osv_memory):
         sale_line_id = wizard.productos_line
 #         sale_line = sale_line_object.read(cr, uid, sale_line_id, ["product_id", "name", "product_uom", "product_uom_qty"], context=context)[0]
         sale_line = sale_line_object.browse(cr, uid, int(sale_line_id), context=context)
+        tipo_fabricacion = wizard.tipo_ldm.name
         
         vals["name"] = wizard.name 
         vals["product_id"] = sale_line.product_id.id#["product_id"][0]
         vals["product_uom"] = sale_line.product_uom.id#["product_uom"][0]
-        vals["product_qty"] = wizard.product_qty  
-        
-        if wizard.bom_id.id:
-            vals["bom_id"] = wizard.bom_id.id
-        else:
-            valores = {
-                "product_id" : vals["product_id"],
-                "product_uom" : vals["product_uom"],
-                "product_qty" : vals["product_qty"],
-                "name" : sale_line.name#["name"],
-            }            
+        vals["product_qty"] = sale_line.product_uom_qty  
+                
+        if sale_id:
+            bom_ids = bom_obj.search(cr, uid, [("status_creation","=","new")], context=context)
             
-            vals["bom_id"] = bom_obj.create(cr, uid, valores, context=context)                        
+            if len(bom_ids) > 0:
+                
+                valores = {
+                    "product_id" : vals["product_id"],
+                    "product_uom" : vals["product_uom"],
+                    "product_qty" : 1, #vals["product_qty"],
+                    "name" : tipo_fabricacion + " " + sale_line.name,
+                    "code" : tipo_fabricacion + " " + sale_line.name#["name"],
+                }            
+                
+                vals["bom_id"] = bom_obj.create(cr, uid, valores, context=context)
+                
+                for id in bom_ids:
+                    bom_obj.write(cr, uid, id, {"bom_id": vals["bom_id"], "status_creation" : "done"})
+        
+            elif wizard.bom_id.id:
+                
+                vals["bom_id"] = wizard.bom_id.id
         
         mrp_id = mrp_object.create(cr, uid, vals, context=context)
-        
-        if sale_id:
-            bom_ids = bom_obj.search(cr, uid, [("venta_wzrd","=",ids[0])], context=context)
-            
-            for id in bom_ids:
-                bom_obj.write(cr, uid, id, {"bom_id": vals["bom_id"]})
           
         return {
             'type': 'ir.actions.act_window',
@@ -253,7 +291,7 @@ class mc_mrp_wizard(osv.osv_memory):
         "product_id" : fields.many2one("product.product", "Producto"),
         "bom_id" : fields.many2one("mrp.bom", "Lista de Material"),
 #         "bom_id_2" : fields.many2one("mrp.bom", "Lista de Material"),
-        "product_qty": fields.float('Cantidad', required=True),
+        "product_qty": fields.float('Cantidad'),
         "product_uom": fields.many2one('product.uom', 'Unidad de Medida', readonly=True),
         "origin" : fields.char("Origen"),
         "bom_lines" : fields.one2many("mrp.bom", "bom_id"),

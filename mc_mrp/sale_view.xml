@@ -104,7 +104,7 @@
 							<group>
 								<div class="oe_right oe_button_box" name="buttons">								
 									
-								<button name="%(mrp_wizard_action)s" type="action" string="Crear MRP" class="oe_highlight" 
+								<button name="%(mrp_wizard_action)s" type="action" string="Crear MO" class="oe_highlight" 
 										context="{'sale_id':active_id}" attrs="{'invisible': [('mrp_sale_state','=','Finalizado')]}"/>
 									
 									<button name="action_ver_mrp" string="Ver M Orders"

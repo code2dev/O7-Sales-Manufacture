@@ -2,3 +2,4 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_mc_mrp_tipo,mc.mrp.tipo,model_mc_mrp_tipo,,1,1,1,1
 access_mc_mrp_estado,mc.mrp.estado,model_mc_mrp_estado,,1,1,1,1
 access_mc_mrp_estado_line,mc.mrp.estado.line,model_mc_mrp_estado_line,,1,1,1,1
+access_mrp_bom_types,mrp.bom.types,model_mrp_bom_types,,1,1,1,1

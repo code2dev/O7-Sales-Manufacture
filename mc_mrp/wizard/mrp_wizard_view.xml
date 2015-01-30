@@ -19,12 +19,12 @@
 	                    	<group>
 	                    		<field name="productos_line" on_change="product_id_change(productos_line)"/>
 	                    		<field name="product_id" invisible="1"/>
-	                    		<field name="product_qty" class="oe_inline"/>
+	                    		<field name="product_qty" class="oe_inline" readonly="1"/>
 	                            <field name="product_uom" />
 	                    	</group>
 	                    	<group>
 	                    		<field name="tipo_ldm" widget="selection" />
-	                    		<field name="bom_id" on_change="bom_id_change(bom_id)" domain="[('tipo_ldm','=',tipo_ldm)]" options="{'limit': 10, 'create': false, 'create_edit': false}"/>
+	                    		<field name="bom_id" on_change="bom_id_change(bom_id)" domain="[('tipo_ldm','=',tipo_ldm), ('tipo_ldm','!=',False)]" options="{'limit': 10, 'create': false, 'create_edit': false}"/>
 	                    		<field name="origin" invisible="1"/>
 	                    	</group>
 	                    
@@ -33,7 +33,7 @@
 	                    	<field name="desc"/>
 	                    </group>
 	                    <field name="bom_lines">
-                    		<tree string="Lineas" editable="bottom">
+                    		<tree string="Lineas" editable="bottom" delete="false">
                     			<!-- <field name="name"/>
                     			<field name="code"/>
                     			<field name="type" /> -->
