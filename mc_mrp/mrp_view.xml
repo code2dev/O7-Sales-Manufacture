@@ -38,6 +38,46 @@
                 <field name="cycle_total" position="replace"/>                            
             </field>
         </record>
+        
+        <record id="mc_mrp_bom_form_view" model="ir.ui.view">
+            <field name="name">mc.mrp.bom.form.view</field>
+            <field name="model">mrp.bom</field>
+            <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>           
+            <field name="arch" type="xml">                
+                <field name="type" position="before">
+                	<field name="tipo_ldm"/>
+                </field>                    
+            </field>
+        </record>
+        
+        <record id="mc_mrp_bom_type_tree_view" model="ir.ui.view">
+            <field name="name">mc.mrp.bom.type.tree.view</field>
+            <field name="model">mrp.bom.types</field>                       
+            <field name="arch" type="xml">
+            	<tree string="Tipos de LDM" editable="bottom">
+            		<field name="name"/>
+            	</tree>                
+                
+            </field>
+        </record>
+        
+        <record id="action_mrp_bom_types" model="ir.actions.act_window">
+			<field name="name">Tipos de LDM</field>
+			<field name="res_model">mrp.bom.types</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="mc_mrp_bom_type_tree_view" />
+			<field name="context">{}</field>
+			<field name="target">current</field>
+		</record>
+        
+        <menuitem 
+        	action="action_mrp_bom_types"
+        	name="Tipos de LDM"
+            id="mrp_bom_types_menu" 
+            parent="mrp.menu_mrp_configuration"           
+            sequence="1"/>
 
 	</data>
 </openerp>

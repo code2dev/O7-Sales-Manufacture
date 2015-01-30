@@ -1,5 +1,25 @@
 from openerp.osv import osv, fields
 
+class mrp_bom_types(osv.osv):
+    _name = "mrp.bom.types"
+    
+    _columns = {
+        "name" : fields.char("Nombre")
+    }
+    
+mrp_bom_types()
+
+class mrp_bom(osv.osv):
+    
+    _inherit = "mrp.bom"
+    _columns = {
+        "tipo_ldm" : fields.many2one("mrp.bom.types", "Tipo de Lista")
+    }
+    
+
+mrp_bom()
+
+
 class mc_mrp_product_produce(osv.osv_memory):
     _inherit = "mrp.product.produce"
     
