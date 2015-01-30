@@ -156,7 +156,6 @@ class mc_mrp_wizard(osv.osv_memory):
         
             
         return result        
-
     
     def bom_id_change(self, cr, uid, ids, bom_id, context=None):
         
@@ -253,11 +252,13 @@ class mc_mrp_wizard(osv.osv_memory):
         "productos_line" : fields.selection(get_productos, "Producto", size=32, select=True, required=True),
         "product_id" : fields.many2one("product.product", "Producto"),
         "bom_id" : fields.many2one("mrp.bom", "Lista de Material"),
+#         "bom_id_2" : fields.many2one("mrp.bom", "Lista de Material"),
         "product_qty": fields.float('Cantidad', required=True),
         "product_uom": fields.many2one('product.uom', 'Unidad de Medida', readonly=True),
         "origin" : fields.char("Origen"),
         "bom_lines" : fields.one2many("mrp.bom", "bom_id"),
-        "tipo_ldm" : fields.many2one("mrp.bom.types", "Tipo de Lista"),
+        "tipo_ldm" : fields.many2one("mrp.bom.types", "Tipo de Lista"), 
+        "bom_id_select" : fields.selection([(0, "Seleccione una LDM")], "Lista de Material")       
     }
     
     _defaults = {  
