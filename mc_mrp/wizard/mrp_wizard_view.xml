@@ -40,7 +40,7 @@
                     			<field name="product_id" />
                     			<field name="name" />
                     			<field name="product_qty" />
-                    			<field name="location_id" domain="[('usage','=','internal'),('chained_location_type','=','none')]"/>
+                    			<field name="location_id" domain="[('ubicacion_prestamo','=',False),('usage','=','internal'),('chained_location_type','=','none')]"/>
                     			<!-- <field name="product_uom" />
                     			<field name="bom_id"/> -->                    			
                     		</tree>
@@ -81,7 +81,7 @@
 		</record>
         
         <record id="mrp_wizard_action" model="ir.actions.act_window">
-			<field name="name">Crear MRP</field>
+			<field name="name">Crear MO</field>
 			<field name="res_model">mrp.production.wizard</field>
 			<field name="view_type">form</field>
 			<field name="view_mode">form</field>
