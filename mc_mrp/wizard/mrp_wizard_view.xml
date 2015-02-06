@@ -25,7 +25,7 @@
 	                    	<group>
 	                    		<field name="tipo_ldm" widget="selection" />
 	                    		<field name="bom_id" on_change="original_bom_id_change(bom_id)" domain="[('tipo_ldm','=',tipo_ldm), ('tipo_ldm','!=',False)]" options="{'limit': 10, 'create': false, 'create_edit': false}"/>
-	                    		<field name="bom_id_2" on_change="bom_id_change(bom_id_2)"/>
+	                    		<field name="bom_id_2" on_change="bom_id_change(bom_id_2)" invisible="1"/>
 	                    		<field name="origin" invisible="1"/>
 	                    	</group><!--  on_change="bom_id_change(bom_id)" -->
 	                    
