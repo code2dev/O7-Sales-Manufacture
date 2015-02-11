@@ -93,6 +93,7 @@
 				<field name="pricelist_id" position="after">
 					<field name="mrp_design" />
 					<field name="mrp_sale_type" required="1"/>
+					<field name="no_pasadas" />
 				</field>				
 				
 				<notebook position="inside">

@@ -138,7 +138,8 @@ class mc_sale_order(osv.osv):
         "estatus_line" : fields.one2many("mc.mrp.estado.line", "order_id", "Proceso"),
         'mrp_sale_type': fields.many2one("mc.mrp.tipo", "Tipo de Venta"),
         'mrp_sale_state': fields.char("Produccion"),
-        'mrp_design' : fields.boolean("Diseno")  
+        'mrp_design' : fields.boolean("Diseno"),
+        'no_pasadas' : fields.char("Numero de pasadas"), 
     }
     
     def action_ver_mrp(self, cr, uid, ids, context):
