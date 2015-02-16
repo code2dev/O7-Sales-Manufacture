@@ -93,7 +93,7 @@
 				<field name="state" position="before">	
 					<field name="entrega_state" invisible="0"/>				
 					<button name="%(mc_sale_wizard_action)s" string="Entregar Producto" type="action" class="oe_highlight" 
-					attrs="{'invisible':[('entrega_state', '=', 'done')]}"/>
+					context="{'sale_id':active_id}" attrs="{'invisible':[('entrega_state', '=', 'done')]}"/>
 				</field>
 							
 				<field name="pricelist_id" position="after">

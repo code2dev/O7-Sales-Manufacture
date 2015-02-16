@@ -11,35 +11,20 @@
                 	
                 	<sheet>
 	                    <div class="oe_title">
-	                        <h1>Sale Order <!-- <field name="name" class="oe_inline"/> --></h1>
+	                        <h1>Sale Order</h1>
 	                    </div>
-	                    
-	                   <!--  <group>
-	                    	
-	                    	<group>
-	                    		
-	                    	</group>
-	                    	<group>
-	                    		
-	                    	</group>
-	                    
-	                    </group>
-	                    <group>
-	                    	
-	                    </group> -->
-	                    <!-- <field name="bom_lines">
-                    		<tree string="Lineas" editable="bottom" delete="true">
+	                  
+                    	<field name="sale_id" on_change="on_change_sale_id(sale_id)"/>
+                    	<field name="sale_lines" readonly="0">
+                    		<tree string="Productos" editable="bottom" delete="false">
+                    			<field name="state"/>
                     			<field name="name"/>
-                    			<field name="code"/>
-                    			<field name="type" />
-                    			<field name="product_id" />
-                    			<field name="name" />
-                    			<field name="product_qty" />
-                    			<field name="location_id" domain="[('ubicacion_prestamo','=',False),('usage','=','internal'),('chained_location_type','=','none')]"/>
-                    			<field name="product_uom" />
-                    			<field name="bom_id"/>                    			
+                    			<field name="product_uom_qty"/>                    			
+                    			<field name="mc_sale_entregados"/>
+                    			<field name="mc_sale_pendientes"/>
+                    			
                     		</tree>
-                    	</field> -->
+                    	</field>
 	                </sheet>
                     <footer class="oe_right">
                     	<button name="action_save_sale_wizard" string="Guardar" type="object" class="oe_highlight"/>
