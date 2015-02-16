@@ -140,7 +140,19 @@ class mc_sale_order(osv.osv):
         'mrp_sale_state': fields.char("Produccion"),
         'mrp_design' : fields.boolean("Diseno"),
         'no_pasadas' : fields.char("Numero de pasadas"), 
+        'entrega_state' : fields.selection([("new", "No Entregado"), 
+                                            ("parcial", "Entrega Parcial"),
+                                            ("done", "Entregado")], "Estado Entrega")
     }
+    
+    _defaults = {
+        'entrega_state' : "new"
+    }
+    
+    def action_entregar_producto(self, cr, uid, ids, context=None):
+        res = self.write(cr, uid, ids, {"entrega_state" : "done"}, context=context)
+        return res
+    
     
     def action_ver_mrp(self, cr, uid, ids, context):
                 

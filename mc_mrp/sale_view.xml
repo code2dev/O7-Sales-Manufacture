@@ -89,6 +89,12 @@
 			<field name="model">sale.order</field>
 			<field name="inherit_id" ref="sale.view_order_form" />			
 			<field name='arch' type='xml'>
+				
+				<field name="state" position="before">	
+					<field name="entrega_state" invisible="0"/>				
+					<button name="%(mc_sale_wizard_action)s" string="Entregar Producto" type="action" class="oe_highlight" 
+					attrs="{'invisible':[('entrega_state', '=', 'done')]}"/>
+				</field>
 							
 				<field name="pricelist_id" position="after">
 					<field name="mrp_design" />
@@ -147,6 +153,7 @@
             	<field name="state" position="before">            		
             		<field name="mrp_design"/>
             		<field name="mrp_sale_state"/>
+            		<field name="entrega_state"/>
             	</field>                
             </field>
         </record>

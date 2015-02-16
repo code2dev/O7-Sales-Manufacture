@@ -12,6 +12,7 @@
     'data': [        
         'security/ir.model.access.csv',
         'wizard/mrp_wizard_view.xml',
+        'wizard/sale_wizard_view.xml',
         'mrp_view.xml',
         'stock_view.xml',
         'sale_view.xml',                

@@ -1,1 +1,2 @@
 import mrp_wizard
+import sale_wizard

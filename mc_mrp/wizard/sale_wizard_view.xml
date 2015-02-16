@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		
+       	<record model="ir.ui.view" id="mc_sale_wizard_view">
+        	<field name="name">mc.sale.wizard.view</field>
+        	<field name="model">mc.sales.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">            
+                <form string="Entregar Producto" version="7.0">        	
+                	
+                	<sheet>
+	                    <div class="oe_title">
+	                        <h1>Sale Order <!-- <field name="name" class="oe_inline"/> --></h1>
+	                    </div>
+	                    
+	                   <!--  <group>
+	                    	
+	                    	<group>
+	                    		
+	                    	</group>
+	                    	<group>
+	                    		
+	                    	</group>
+	                    
+	                    </group>
+	                    <group>
+	                    	
+	                    </group> -->
+	                    <!-- <field name="bom_lines">
+                    		<tree string="Lineas" editable="bottom" delete="true">
+                    			<field name="name"/>
+                    			<field name="code"/>
+                    			<field name="type" />
+                    			<field name="product_id" />
+                    			<field name="name" />
+                    			<field name="product_qty" />
+                    			<field name="location_id" domain="[('ubicacion_prestamo','=',False),('usage','=','internal'),('chained_location_type','=','none')]"/>
+                    			<field name="product_uom" />
+                    			<field name="bom_id"/>                    			
+                    		</tree>
+                    	</field> -->
+	                </sheet>
+                    <footer class="oe_right">
+                    	<button name="action_save_sale_wizard" string="Guardar" type="object" class="oe_highlight"/>
+                    	<button special="cancel" string="Cancelar"/>
+                    </footer>
+                    
+                </form>
+            </field>
+		</record>   
+		
+
+		<record id="mc_sale_wizard_action" model="ir.actions.act_window">
+			<field name="name">Entregar Producto</field>
+			<field name="res_model">mc.sales.wizard</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="mc_sale_wizard_view"/>
+			<field name="target">new</field>
+		</record>
+		
+	</data>
+</openerp>
