@@ -22,6 +22,9 @@ class sale_order_line(osv.osv):
         
         if context is not None and context.has_key("sale_id"):
             
+            if vals.has_key("order_id"):
+                del vals["order_id"]
+            
             if type(ids) is list:
                 ids = ids[0]
             
@@ -68,6 +71,13 @@ class mc_sales_wizard(osv.osv_memory):
     _name = "mc.sales.wizard"
     
     def action_save_sale_wizard(self, cr, uid, ids, context=None):
+        return True
+    
+    def action_save_sale_wizard_all(self, cr, uid, ids, context=None):
+        
+        this = self.browse(cr, uid, ids[0], context=context)
+        sale_id = this["sale_id"]        
+        self.pool.get("sale.order").write(cr, uid, sale_id, {"entrega_state" : "done"}, context=context)        
         return True
     
     def get_sale_id(self, cr, uid, context=None):

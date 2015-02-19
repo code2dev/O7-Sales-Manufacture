@@ -25,6 +25,7 @@
                     	</field>
 	                </sheet>
                     <footer class="oe_right">
+                    	<button name="action_save_sale_wizard_all" string="Entregar Todo" type="object" class="oe_highlight"/>
                     	<button name="action_save_sale_wizard" string="Guardar" type="object" class="oe_highlight"/>
                     	<button special="cancel" string="Cancelar"/>
                     </footer>
