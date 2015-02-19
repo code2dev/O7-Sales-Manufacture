@@ -91,9 +91,9 @@
 			<field name='arch' type='xml'>
 				
 				<field name="state" position="before">	
-					<field name="entrega_state" invisible="0"/>				
+					<field name="entrega_state" invisible="1"/>				
 					<button name="%(mc_sale_wizard_action)s" string="Entregar Producto" type="action" class="oe_highlight" 
-					context="{'sale_id':active_id}" attrs="{'invisible':[('entrega_state', '=', 'done')]}"/>
+					context="{'sale_id':active_id}" attrs="{'invisible':['|', ('entrega_state', '=', 'done'), ('state', 'in', ['draft', 'sent', 'cancel'])]}"/>
 				</field>
 							
 				<field name="pricelist_id" position="after">

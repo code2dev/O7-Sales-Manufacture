@@ -10,18 +10,16 @@
                 <form string="Entregar Producto" version="7.0">        	
                 	
                 	<sheet>
-	                    <div class="oe_title">
-	                        <h1>Sale Order</h1>
-	                    </div>
+	                   
 	                  
-                    	<field name="sale_id" on_change="on_change_sale_id(sale_id)"/>
+                    	<field name="sale_id" on_change="on_change_sale_id(sale_id)" invisible="1"/>
                     	<field name="sale_lines" readonly="0">
-                    		<tree string="Productos" editable="bottom" delete="false">
+                    		<tree string="Productos" editable="bottom" delete="false" create="false">
                     			<field name="state"/>
                     			<field name="name"/>
                     			<field name="product_uom_qty"/>                    			
                     			<field name="mc_sale_entregados"/>
-                    			<field name="mc_sale_pendientes"/>
+                    			<field name="mc_sale_pendientes" readonly="1"/>
                     			
                     		</tree>
                     	</field>

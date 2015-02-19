@@ -15,16 +15,60 @@ class sale_order_line(osv.osv):
     }
     
     def create(self, cr, uid, vals, context=None): 
-        return super(self, cr, uid, vals, context=context)
+        vals["mc_sale_pendientes"] = vals["product_uom_qty"]
+        return super(sale_order_line, self).create(cr, uid, vals, context=context)
     
-    def write(self, cr, uid, ids, vals, context=None): 
-        return super(self, cr, uid, ids, vals, context=context)
+    def write(self, cr, uid, ids, vals, context=None):
+        
+        if context is not None and context.has_key("sale_id"):
+            
+            if type(ids) is list:
+                ids = ids[0]
+            
+            this = self.browse(cr, uid, ids, context=context) 
+            total = this["product_uom_qty"]
+            pendientes = this["mc_sale_pendientes"]
+        
+            if vals.has_key("mc_sale_entregados"):
+                entregados = vals["mc_sale_entregados"]
+                
+                if entregados > pendientes:
+                    raise osv.except_osv('Error', 'La cantidad a entregar debe ser <= a la cantidad pendiente.')
+                else:
+                    pendientes = pendientes - entregados
+                    vals["mc_sale_pendientes"] = pendientes
+                    vals["mc_sale_entregados"] = 0
+            
+            
+            #Verificamos si ya se entregaron todos los productos.
+            sale_id = context["sale_id"]   
+            sale_obj = self.pool.get("sale.order")
+             
+            order_line_ids = self.search(cr, uid, [("order_id", "=", sale_id)], context=context)
+            
+            status_entrega = False
+            
+            for id_line in order_line_ids:
+                line = self.browse(cr, uid, id_line, context=context)
+                if line["mc_sale_pendientes"] > 0:
+                    status_entrega = True
+                    break
+            
+            if status_entrega:
+                sale_obj.write(cr, uid, sale_id, {"entrega_state" : "done"}, context=context)
+            else:
+                sale_obj.write(cr, uid, sale_id, {"entrega_state" : "parcial"}, context=context)
+                          
+        return super(sale_order_line, self).write(cr, uid, ids, vals, context=context)        
     
 sale_order_line()
 
 class mc_sales_wizard(osv.osv_memory):    
 
     _name = "mc.sales.wizard"
+    
+    def action_save_sale_wizard(self, cr, uid, ids, context=None):
+        return True
     
     def get_sale_id(self, cr, uid, context=None):
         
