@@ -16,8 +16,15 @@
 				<xpath expr="//field[@name='move_lines']/tree/field[@name='product_qty']" position="after">
 					<field name="location_id"/>
 					<field name="product_cost"/>
+					<field name="name"/>
 					<!-- <field name="product_cost_total"/> -->
-				</xpath>   
+				</xpath> 
+				
+				<xpath expr="//field[@name='move_lines']/tree/button[@name='%(stock.move_consume)d']" position="attributes">
+					<attribute name="context">{'consume': True, 'mo': name}</attribute>
+					<!-- <field name="product_cost_total"/> -->
+				</xpath> 
+				  
 				<xpath expr="//field[@name='move_lines2']/tree/field[@name='product_qty']" position="after">
 					<field name="location_id"/>
 					<field name="product_cost"/>

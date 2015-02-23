@@ -146,6 +146,27 @@ class mc_mrp_material_wizard(osv.osv_memory):
             mrp_obj._make_production_line_procurement(cr, uid, prod_line, shipment_move_id, context=context)
         
         mrp_obj.action_calculate_mrp_price(cr, uid, [context["mo"]], context=context)
+                
+        usr_obj = self.pool.get("res.users")
+        usr = usr_obj.browse(cr, 1, uid, context=context)
+        partner_id = usr.partner_id.id
+        
+        msg_obj = self.pool.get("mail.message")
+        
+        data = {
+            "attachment_ids" : [],
+            "author_id" : partner_id,
+            "body" : "<p>Agregado(s) " + str(this.product_qty) + " " + product.product_tmpl_id.uom_id.name + "(s) de " + product.name + "</p>",
+            "model" : "mrp.production",
+            "parent_id" : msg_obj.search(cr, uid, [("res_id", "=", context["mo"]), ("parent_id", "=", False)], context=context)[0],
+            "partner_ids" : [],
+            "res_id" : context["mo"],
+            "subject" : False,
+            "subtype_id" : 1,
+            "type" : "comment"
+        }
+        
+        msg_id = msg_obj.create(cr, uid, data, context=context)
         
         return {
             'type': 'ir.actions.client',
