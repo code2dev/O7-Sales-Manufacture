@@ -1,5 +1,4 @@
 from openerp.osv import osv, fields
-from _smbc import Context
 
 class mc_stock_move(osv.osv):
     
